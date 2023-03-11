@@ -2,7 +2,9 @@
 //
 // * Design is copied from https://cruip.com/demos/mosaic/
 // * Icons are from https://tabler-icons.io
+// * We use Headless UI for ARIA support. https://headlessui.com/
 
+import { useState } from "react";
 import clsx from "clsx";
 
 import {
@@ -14,9 +16,45 @@ import {
   ChevDownIcon,
 } from "./Icons";
 
-const App = () => {
+import { Menu } from "@headlessui/react";
+
+const AccountMenu = () => {
   return (
-    <div id="app" className={clsx("flex", "font-inter")}>
+    <div
+      id="account-menu"
+      className={clsx(
+        "grid grid-rows-2",
+        "absolute right-0 top-10",
+        "h-36 w-48",
+        "bg-white",
+        "drop-shadow-md",
+        "border-gray-50",
+        "border-[1px]",
+        "rounded-sm"
+      )}
+    >
+      <div
+        className={clsx("py-2 px-4", "h-fit", "border-gray-50 border-b-[1px]")}
+      >
+        <p>Bannmei Inc.,</p>
+        <p className={clsx("italic", "text-gray-200 text-sm")}>Administrator</p>
+      </div>
+      <div className={clsx("px-4", "flex flex-col gap-1")}>
+        <a href="#" className={clsx("block", "text-violet")}>
+          Settings
+        </a>
+        <a href="#" className={clsx("block", "text-violet")}>
+          Sign out
+        </a>
+      </div>
+    </div>
+  );
+};
+
+const App = () => {
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  return (
+    <div id="app" className={clsx("flex")}>
       <div id="sidebar-container" className={clsx("hidden")}></div>
       <div id="content-container">
         <div
@@ -39,7 +77,7 @@ const App = () => {
             <SearchIcon
               style={clsx(
                 "h-8 w-8",
-                "p-1",
+                "p-2",
                 "stroke-gray-400 fill-white",
                 "stroke-2",
                 "bg-gray-50",
@@ -49,7 +87,7 @@ const App = () => {
             <MessageIcon
               style={clsx(
                 "h-8 w-8",
-                "p-1",
+                "p-2",
                 "stroke-gray-400 fill-white",
                 "stroke-2",
                 "bg-gray-50",
@@ -59,7 +97,7 @@ const App = () => {
             <ExclamationIcon
               style={clsx(
                 "h-8 w-8",
-                "p-1",
+                "p-2",
                 "stroke-gray-400 fill-white",
                 "stroke-2",
                 "bg-gray-50",
@@ -75,8 +113,9 @@ const App = () => {
               )}
             />
             <div
-              id="account-menu"
-              className={clsx("flex", "place-items-center")}
+              id="account-menu-button"
+              onClick={() => setAccountMenuOpen(!accountMenuOpen)}
+              className={clsx("flex", "relative", "place-items-center")}
             >
               <BrandLogoIcon
                 style={clsx(
@@ -90,14 +129,18 @@ const App = () => {
               <span className={clsx("font-normal text-sm text-gray-500")}>
                 Banmei Inc.,
               </span>
-              <ChevDownIcon style="w-4 h-4 stroke-gray-400 fill-white" />
+              <ChevDownIcon
+                style={clsx(
+                  "w-4 h-4",
+                  "stroke-gray-400 fill-white stroke-2",
+                  "ml-1"
+                )}
+              />
+              {accountMenuOpen ? <AccountMenu /> : <></>}
             </div>
           </div>
         </div>
-        <div
-          id="content"
-          className={clsx("bg-gray-50", "w-screen h-screen", "px-4")}
-        ></div>
+        <div id="content" className={clsx("w-screen h-screen", "px-4")}></div>
       </div>
     </div>
   );
